@@ -599,7 +599,7 @@ const LEVELS = [
 // ── State ────────────────────────────────────────────────────────────────────
 const G = {
   best: [0,0,0,0,0,0,0,0,0,0],   // best score (# correct) per level
-  unlocked: [true,false,false,false,false,false,false,false,false,false],
+  unlocked: [true,true,true,true,true,true,true,true,true,true],
   lvl: 0, qIdx: 0, correct: 0, streak: 0, busy: false,
   questions: []  // 5 randomly sampled questions for the current level
 };
@@ -751,7 +751,6 @@ function advanceQ() {
 function finishLevel() {
   const li=G.lvl, sc=G.correct;
   if(sc>G.best[li]) G.best[li]=sc;
-  if(li+1<LEVELS.length) G.unlocked[li+1]=true;
 
   document.getElementById('cpl-stars').textContent =
     sc===5?'⭐⭐⭐':sc>=4?'⭐⭐':sc>=3?'⭐':'💫';
