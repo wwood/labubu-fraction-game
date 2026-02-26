@@ -50,6 +50,11 @@ h1{font-size:2.2rem;background:linear-gradient(135deg,#ff6eb4,#a855f7,#ffd700);-
 .g-title{color:#c4b5e8;font-size:.88rem;}
 .score-pill{display:flex;align-items:center;gap:6px;background:rgba(45,27,78,.85);border:1px solid rgba(255,110,180,.3);border-radius:20px;padding:5px 13px;}
 .score-pill .snum{color:#ffd700;font-weight:700;font-size:1.05rem;}
+#streak-pill{display:flex;align-items:center;gap:4px;background:rgba(45,27,78,.85);border:1px solid rgba(251,146,60,.35);border-radius:20px;padding:5px 13px;opacity:0;transition:opacity .25s;}
+#streak-pill.show{opacity:1;}
+#streak-pill .scount{color:#fb923c;font-weight:700;font-size:1.05rem;}
+@keyframes streakPop{0%{transform:scale(1);}45%{transform:scale(1.35);}100%{transform:scale(1);}}
+#streak-pill.pop{animation:streakPop .3s ease;}
 
 .lb-row{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;min-height:48px;align-items:center;margin-bottom:10px;}
 .lb-slot{width:38px;height:38px;filter:grayscale(.85) opacity(.28);transition:all .3s;}
@@ -136,6 +141,7 @@ h1{font-size:2.2rem;background:linear-gradient(135deg,#ff6eb4,#a855f7,#ffd700);-
     <div style="margin-top:42px;">
       <div class="g-header">
         <div class="g-title" id="g-lvl-label">Level 1</div>
+        <div id="streak-pill"><span>🔥</span><span class="scount" id="scount">0</span></div>
         <div class="score-pill">
           <div style="width:20px;height:20px;" id="score-icon"></div>
           <span class="snum" id="snum">0</span>
@@ -339,7 +345,7 @@ const LEVELS = [
 const G = {
   best: [0,0,0,0,0],   // best score (# correct) per level
   unlocked: [true,false,false,false,false],
-  lvl: 0, qIdx: 0, correct: 0, busy: false
+  lvl: 0, qIdx: 0, correct: 0, streak: 0, busy: false
 };
 
 const total = () => G.best.reduce((s,v)=>s+v,0);
@@ -374,7 +380,9 @@ function renderLvlSelect() {
 
 // ── Start Level ───────────────────────────────────────────────────────────────
 function startLevel(idx) {
-  G.lvl=idx; G.qIdx=0; G.correct=0; G.busy=false;
+  G.lvl=idx; G.qIdx=0; G.correct=0; G.streak=0; G.busy=false;
+  const sp=document.getElementById('streak-pill');
+  sp.className=''; sp.classList.remove('show');
   document.getElementById('g-lvl-label').textContent =
     `Level ${idx+1}: ${LEVELS[idx].title}`;
   document.getElementById('snum').textContent = total();
@@ -430,11 +438,16 @@ function pick(idx) {
   const fb=document.getElementById('feedback');
   if (ok) {
     G.correct++;
+    G.streak++;
     const slot=document.getElementById('lb-'+G.qIdx);
     if(slot) slot.classList.add('earned');
     fb.textContent=praise[Math.floor(Math.random()*praise.length)];
     fb.classList.add('ok');
+    updateStreak();
   } else {
+    G.streak=0;
+    const sp=document.getElementById('streak-pill');
+    sp.className=''; // hide with fade
     btns[idx].classList.add('wrong');
     fb.textContent=`Not quite! ✗`;
     fb.classList.add('no');
@@ -445,6 +458,17 @@ function pick(idx) {
     document.addEventListener('keydown', onEnterAdvance);
   }
   if (ok) setTimeout(advanceQ, 1500);
+}
+
+function updateStreak() {
+  const sp=document.getElementById('streak-pill');
+  if (G.streak < 2) { sp.className=''; return; }
+  document.getElementById('scount').textContent = G.streak;
+  sp.className='show';
+  // retrigger pop animation
+  void sp.offsetWidth;
+  sp.classList.add('pop');
+  sp.addEventListener('animationend', ()=>sp.classList.remove('pop'), {once:true});
 }
 
 function onEnterAdvance(e) {
