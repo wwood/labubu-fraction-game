@@ -83,6 +83,14 @@ h1{font-size:2.2rem;background:linear-gradient(135deg,#ff6eb4,#a855f7,#ffd700);-
 
 .vic-card{background:rgba(45,27,78,.96);border:2px solid #ffd700;border-radius:24px;padding:38px 26px;text-align:center;animation:glowPulse 2s ease-in-out infinite;}
 .vic-total{font-size:3rem;font-weight:900;background:linear-gradient(135deg,#ff6eb4,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+/* Perfect-score celebration */
+#celeb-overlay{position:fixed;inset:0;pointer-events:none;z-index:999;}
+#celeb-overlay.fading{animation:celebFade .6s ease forwards;}
+@keyframes celebFade{to{opacity:0;}}
+.celeb-lb{position:absolute;width:72px;height:72px;animation:celebPop .35s ease both, celebWiggle .55s ease-in-out .35s infinite;filter:drop-shadow(0 4px 14px rgba(255,110,180,.8));}
+@keyframes celebPop{0%{transform:scale(0) rotate(var(--r));opacity:0;}65%{transform:scale(1.25) rotate(var(--r));}100%{transform:scale(1) rotate(var(--r));}}
+@keyframes celebWiggle{0%,100%{transform:scale(1) rotate(var(--r));}30%{transform:scale(1.08) rotate(calc(var(--r) + 18deg));}70%{transform:scale(1.08) rotate(calc(var(--r) - 18deg));}}
 </style>
 </head>
 <body>
@@ -172,23 +180,42 @@ h1{font-size:2.2rem;background:linear-gradient(135deg,#ff6eb4,#a855f7,#ffd700);-
 
 <script>
 // ── SVG Labubu ─────────────────────────────────────────────────────────────
-const LB = `<svg viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
-  <polygon points="22,48 30,8 38,48" fill="#c090d8"/>
-  <polygon points="62,48 70,8 78,48" fill="#c090d8"/>
-  <polygon points="25,46 30,16 35,46" fill="#f0c0e8"/>
-  <polygon points="65,46 70,16 75,46" fill="#f0c0e8"/>
-  <circle cx="50" cy="67" r="38" fill="#c090d8"/>
-  <circle cx="37" cy="60" r="12" fill="white"/>
-  <circle cx="63" cy="60" r="12" fill="white"/>
-  <circle cx="37" cy="60" r="7.5" fill="#1a0820"/>
-  <circle cx="63" cy="60" r="7.5" fill="#1a0820"/>
-  <circle cx="40" cy="57" r="3" fill="white"/>
-  <circle cx="66" cy="57" r="3" fill="white"/>
-  <path d="M34 78 Q50 93 66 78" fill="#f070a0" stroke="#1a0820" stroke-width="2"/>
-  <rect x="42" y="77" width="6" height="8" rx="1.5" fill="white"/>
-  <rect x="52" y="77" width="6" height="8" rx="1.5" fill="white"/>
-  <circle cx="20" cy="72" r="9" fill="#f9a8d4" opacity="0.55"/>
-  <circle cx="80" cy="72" r="9" fill="#f9a8d4" opacity="0.55"/>
+const LB = `<svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Ears (drawn behind body) -->
+  <polygon points="22,44 30,8 38,44" fill="#c090d8"/>
+  <polygon points="62,44 70,8 78,44" fill="#c090d8"/>
+  <polygon points="25,42 30,16 35,42" fill="#f0c0e8"/>
+  <polygon points="65,42 70,16 75,42" fill="#f0c0e8"/>
+  <!-- Stubby legs (drawn behind body) -->
+  <rect x="30" y="84" width="16" height="27" rx="8" fill="#b880cc"/>
+  <rect x="54" y="84" width="16" height="27" rx="8" fill="#b880cc"/>
+  <!-- Furry body: 16-spike star polygon (center 50,58) -->
+  <polygon points="50,24 56,31 63,27 66,35 74,34 73,42 81,45 78,53 84,58 78,64 81,71 73,74 74,82 66,81 63,89 56,86 50,92 45,86 37,89 34,81 26,82 27,74 19,71 23,64 16,58 23,53 19,45 27,42 26,34 34,35 37,27 45,31" fill="#c090d8"/>
+  <!-- Leg fur tufts at feet -->
+  <polygon points="30,107 33,116 37,109 40,118 43,110 45,115 46,108" fill="#c090d8"/>
+  <polygon points="54,107 57,116 61,109 64,118 67,110 69,115 70,108" fill="#c090d8"/>
+  <!-- Eyes -->
+  <circle cx="36" cy="50" r="11" fill="white"/>
+  <circle cx="64" cy="50" r="11" fill="white"/>
+  <circle cx="36" cy="50" r="7" fill="#1a0820"/>
+  <circle cx="64" cy="50" r="7" fill="#1a0820"/>
+  <circle cx="39" cy="47" r="2.5" fill="white"/>
+  <circle cx="67" cy="47" r="2.5" fill="white"/>
+  <!-- Mouth -->
+  <path d="M33 68 Q50 83 67 68" fill="#f070a0" stroke="#1a0820" stroke-width="1.8"/>
+  <!-- 9 teeth (x=35→63, width=2.5, gap=0.7) -->
+  <rect x="35.0" y="67" width="2.5" height="9" rx="1.2" fill="white"/>
+  <rect x="38.2" y="67" width="2.5" height="9" rx="1.2" fill="white"/>
+  <rect x="41.4" y="67" width="2.5" height="9" rx="1.2" fill="white"/>
+  <rect x="44.6" y="67" width="2.5" height="9" rx="1.2" fill="white"/>
+  <rect x="47.8" y="67" width="2.5" height="9" rx="1.2" fill="white"/>
+  <rect x="51.0" y="67" width="2.5" height="9" rx="1.2" fill="white"/>
+  <rect x="54.2" y="67" width="2.5" height="9" rx="1.2" fill="white"/>
+  <rect x="57.4" y="67" width="2.5" height="9" rx="1.2" fill="white"/>
+  <rect x="60.6" y="67" width="2.5" height="9" rx="1.2" fill="white"/>
+  <!-- Cheeks -->
+  <circle cx="17" cy="64" r="8" fill="#f9a8d4" opacity="0.55"/>
+  <circle cx="83" cy="64" r="8" fill="#f9a8d4" opacity="0.55"/>
 </svg>`;
 
 // ── Question data ───────────────────────────────────────────────────────────
@@ -412,7 +439,40 @@ function finishLevel() {
     nb.textContent='Next Level →';
     nb.onclick=()=>startLevel(li+1);
   }
-  showS('complete');
+
+  if (sc===5) {
+    celebratePerfect(()=>showS('complete'));
+  } else {
+    showS('complete');
+  }
+}
+
+// ── Perfect-score celebration ──────────────────────────────────────────────────
+function celebratePerfect(done) {
+  const overlay = document.createElement('div');
+  overlay.id = 'celeb-overlay';
+  document.body.appendChild(overlay);
+
+  let spawned = 0;
+  const total = 200;
+  const timer = setInterval(()=>{
+    const lb = document.createElement('div');
+    lb.className = 'celeb-lb';
+    const deg = Math.random()*360 - 180;
+    lb.style.cssText =
+      `left:${3+Math.random()*88}%;top:${3+Math.random()*88}%;--r:${deg}deg;`;
+    lb.innerHTML = LB;
+    overlay.appendChild(lb);
+    spawned++;
+    if (spawned >= total) {
+      clearInterval(timer);
+      // brief pause then fade out
+      setTimeout(()=>{
+        overlay.classList.add('fading');
+        setTimeout(()=>{ overlay.remove(); done(); }, 600);
+      }, 700);
+    }
+  }, 33); // ~30 per second
 }
 
 function replayLvl(){startLevel(G.lvl);}
