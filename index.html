@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Labubu Fraction Quest!</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:linear-gradient(135deg,#1a0a2e 0%,#2d1b69 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}
+
+.star{position:fixed;color:rgba(255,255,255,0.15);animation:floatUp linear infinite;pointer-events:none;}
+@keyframes floatUp{0%{transform:translateY(110vh) rotate(0deg);opacity:0;}10%{opacity:1;}90%{opacity:1;}100%{transform:translateY(-10vh) rotate(360deg);opacity:0;}}
+
+.wrap{width:100%;max-width:580px;padding:16px;position:relative;z-index:10;}
+.screen{display:none;} .screen.active{display:block;}
+
+/* Cards */
+.card{background:rgba(45,27,78,0.92);border:2px solid #ff6eb4;border-radius:24px;padding:36px 28px;text-align:center;box-shadow:0 0 40px rgba(255,110,180,0.25);}
+.gold-card{border-color:#ffd700;box-shadow:0 0 40px rgba(255,215,0,0.25);}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 30px rgba(255,215,0,0.25);}50%{box-shadow:0 0 60px rgba(255,215,0,0.5);}}
+
+h1{font-size:2.2rem;background:linear-gradient(135deg,#ff6eb4,#a855f7,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;}
+.sub{color:#c4b5e8;font-size:0.95rem;margin-bottom:20px;line-height:1.5;}
+
+/* Labubu big bounce */
+.lb-big{width:130px;height:130px;margin:0 auto 20px;animation:bounce 2s ease-in-out infinite;filter:drop-shadow(0 4px 14px rgba(255,110,180,0.45));}
+@keyframes bounce{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-12px) rotate(3deg);}}
+
+/* Buttons */
+.btn{background:linear-gradient(135deg,#ff6eb4,#a855f7);border:none;color:#fff;font-size:1.05rem;font-weight:700;padding:13px 36px;border-radius:50px;cursor:pointer;transition:all .2s;box-shadow:0 4px 15px rgba(255,110,180,0.4);letter-spacing:.4px;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(255,110,180,0.55);}
+.btn:active{transform:translateY(0);}
+.btn-out{background:transparent;border:2px solid #a855f7;color:#c4b5e8;}
+.btn-out:hover{background:rgba(168,85,247,.18);box-shadow:0 4px 15px rgba(168,85,247,.3);}
+
+/* Level grid */
+.lvl-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0;}
+.lvl-card{background:rgba(45,27,78,.8);border:2px solid rgba(168,85,247,.35);border-radius:16px;padding:14px 10px;cursor:pointer;transition:all .2s;color:#fff;}
+.lvl-card:hover{border-color:#ff6eb4;background:rgba(255,110,180,.12);transform:translateY(-2px);box-shadow:0 4px 14px rgba(255,110,180,.3);}
+.lvl-card.locked{opacity:.38;cursor:not-allowed;}
+.lvl-card.locked:hover{transform:none;border-color:rgba(168,85,247,.35);background:rgba(45,27,78,.8);box-shadow:none;}
+.lvl-card .big{font-size:1.8rem;} .lvl-card .lname{font-size:.82rem;color:#c4b5e8;margin-top:3px;} .lvl-card .stars{font-size:.88rem;margin-top:5px;}
+
+/* Back button */
+.back-btn{position:absolute;top:14px;left:14px;background:rgba(45,27,78,.85);border:1px solid rgba(168,85,247,.4);color:#c4b5e8;font-size:.88rem;padding:7px 15px;border-radius:20px;cursor:pointer;transition:all .2s;z-index:20;}
+.back-btn:hover{color:#fff;border-color:#ff6eb4;}
+
+/* Game screen */
+.g-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.g-title{color:#c4b5e8;font-size:.88rem;}
+.score-pill{display:flex;align-items:center;gap:6px;background:rgba(45,27,78,.85);border:1px solid rgba(255,110,180,.3);border-radius:20px;padding:5px 13px;}
+.score-pill .snum{color:#ffd700;font-weight:700;font-size:1.05rem;}
+
+.lb-row{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;min-height:48px;align-items:center;margin-bottom:10px;}
+.lb-slot{width:38px;height:38px;filter:grayscale(.85) opacity(.28);transition:all .3s;}
+.lb-slot.earned{filter:drop-shadow(0 2px 7px rgba(255,110,180,.65));animation:lbPop .5s ease;}
+@keyframes lbPop{0%{transform:scale(0) rotate(-20deg);}60%{transform:scale(1.22) rotate(5deg);}100%{transform:scale(1) rotate(0);}}
+
+.prog-wrap{background:rgba(45,27,78,.6);border-radius:8px;height:7px;margin-bottom:16px;overflow:hidden;}
+.prog-bar{height:100%;background:linear-gradient(90deg,#ff6eb4,#a855f7);border-radius:8px;transition:width .4s ease;}
+
+.q-card{background:rgba(45,27,78,.92);border:2px solid rgba(168,85,247,.4);border-radius:18px;padding:24px 20px;margin-bottom:16px;box-shadow:0 4px 18px rgba(0,0,0,.28);}
+.q-num{color:#a855f7;font-size:.78rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+.q-text{color:#fff;font-size:1.15rem;line-height:1.55;font-weight:500;}
+
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.cbtn{background:rgba(45,27,78,.82);border:2px solid rgba(168,85,247,.38);border-radius:14px;padding:17px 14px;cursor:pointer;color:#fff;font-size:1.05rem;font-weight:700;text-align:center;transition:all .2s;line-height:1.3;}
+.cbtn:hover:not(:disabled){border-color:#ff6eb4;background:rgba(255,110,180,.13);transform:translateY(-2px);box-shadow:0 4px 13px rgba(255,110,180,.28);}
+.cbtn.correct{border-color:#4ade80!important;background:rgba(74,222,128,.18)!important;animation:cPop .35s ease;}
+.cbtn.wrong{border-color:#f87171!important;background:rgba(248,113,113,.18)!important;animation:wShake .38s ease;}
+@keyframes cPop{0%{transform:scale(1);}50%{transform:scale(1.06);}100%{transform:scale(1);}}
+@keyframes wShake{0%,100%{transform:translateX(0);}25%{transform:translateX(-7px);}75%{transform:translateX(7px);}}
+
+.feedback{text-align:center;font-size:1rem;font-weight:700;height:34px;display:flex;align-items:center;justify-content:center;margin-top:12px;border-radius:10px;}
+.feedback.ok{color:#4ade80;} .feedback.no{color:#f87171;}
+
+/* Complete & Victory */
+.cpl-card{background:rgba(45,27,78,.95);border:2px solid #ffd700;border-radius:24px;padding:36px 26px;text-align:center;box-shadow:0 0 40px rgba(255,215,0,.22);}
+.stars-big{font-size:2.4rem;letter-spacing:8px;margin:14px 0;}
+.cpl-sub{color:#c4b5e8;font-size:.95rem;margin-bottom:18px;}
+.lb-collected{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:16px 0;}
+.btn-row{display:flex;gap:11px;justify-content:center;flex-wrap:wrap;margin-top:8px;}
+
+.vic-card{background:rgba(45,27,78,.96);border:2px solid #ffd700;border-radius:24px;padding:38px 26px;text-align:center;animation:glowPulse 2s ease-in-out infinite;}
+.vic-total{font-size:3rem;font-weight:900;background:linear-gradient(135deg,#ff6eb4,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- ── TITLE ────────────────────────────────── -->
+  <div id="s-title" class="screen active">
+    <div class="card">
+      <div class="lb-big" id="title-lb"></div>
+      <h1>Labubu Quest!</h1>
+      <p class="sub">Learn Fractions &amp; Decimals<br>and collect Labubu friends! ✨</p>
+      <p style="color:#c4b5e8;font-size:.88rem;margin-bottom:22px;line-height:1.6;">
+        Answer math questions correctly to earn Labubu.<br>
+        5 levels · 5 questions each · Up to 3 ⭐ per level!
+      </p>
+      <button class="btn" onclick="showS('level-select')">Start Adventure!</button>
+    </div>
+  </div>
+
+  <!-- ── LEVEL SELECT ──────────────────────────── -->
+  <div id="s-level-select" class="screen">
+    <button class="back-btn" onclick="showS('title')">← Back</button>
+    <div class="card" style="margin-top:40px;">
+      <h1 style="font-size:1.7rem;margin-bottom:4px;">Choose a Level</h1>
+      <p class="sub">Collect Labubu by answering correctly!</p>
+      <div class="lvl-grid" id="lvl-grid"></div>
+      <p style="color:#c4b5e8;font-size:.85rem;">
+        Total Labubu: <span id="total-disp" style="color:#ffd700;font-weight:700;">0</span> / 25
+      </p>
+    </div>
+  </div>
+
+  <!-- ── GAME ──────────────────────────────────── -->
+  <div id="s-game" class="screen">
+    <button class="back-btn" onclick="showS('level-select')">← Menu</button>
+    <div style="margin-top:42px;">
+      <div class="g-header">
+        <div class="g-title" id="g-lvl-label">Level 1</div>
+        <div class="score-pill">
+          <div style="width:20px;height:20px;" id="score-icon"></div>
+          <span class="snum" id="snum">0</span>
+        </div>
+      </div>
+      <div class="lb-row" id="lb-row"></div>
+      <div class="prog-wrap"><div class="prog-bar" id="prog-bar" style="width:0%"></div></div>
+      <div class="q-card">
+        <div class="q-num" id="q-num">Question 1 of 5</div>
+        <div class="q-text" id="q-text"></div>
+      </div>
+      <div class="choices" id="choices"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+  </div>
+
+  <!-- ── LEVEL COMPLETE ────────────────────────── -->
+  <div id="s-complete" class="screen">
+    <div class="cpl-card">
+      <div style="width:100px;height:100px;margin:0 auto 14px;animation:bounce 2s ease-in-out infinite;filter:drop-shadow(0 4px 14px rgba(255,110,180,.4));" id="cpl-lb"></div>
+      <h2 style="color:#fff;font-size:1.4rem;" id="cpl-title">Level Complete!</h2>
+      <div class="stars-big" id="cpl-stars">⭐⭐⭐</div>
+      <p class="cpl-sub" id="cpl-sub">You got 5/5 correct!</p>
+      <div class="lb-collected" id="lb-collected"></div>
+      <div class="btn-row">
+        <button class="btn btn-out" onclick="replayLvl()">↩ Replay</button>
+        <button class="btn" id="next-btn">Next Level →</button>
+      </div>
+      <button class="btn btn-out" style="margin-top:11px;width:100%;" onclick="showS('level-select')">Level Select</button>
+    </div>
+  </div>
+
+  <!-- ── VICTORY ───────────────────────────────── -->
+  <div id="s-victory" class="screen">
+    <div class="vic-card">
+      <div style="font-size:3rem;margin-bottom:6px;">🏆</div>
+      <h1>You Win!</h1>
+      <p class="sub">You've mastered fractions &amp; decimals!</p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:18px 0;" id="vic-lb-row"></div>
+      <p style="color:#c4b5e8;font-size:.9rem;margin-bottom:6px;">Labubu Collected</p>
+      <div class="vic-total" id="vic-score">0 / 25</div>
+      <p style="color:#c4b5e8;font-size:.88rem;margin:14px 0 18px;">Fraction superstar! Keep learning! ⭐</p>
+      <button class="btn" onclick="showS('level-select')">Play Again</button>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+// ── SVG Labubu ─────────────────────────────────────────────────────────────
+const LB = `<svg viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
+  <polygon points="22,48 30,8 38,48" fill="#c090d8"/>
+  <polygon points="62,48 70,8 78,48" fill="#c090d8"/>
+  <polygon points="25,46 30,16 35,46" fill="#f0c0e8"/>
+  <polygon points="65,46 70,16 75,46" fill="#f0c0e8"/>
+  <circle cx="50" cy="67" r="38" fill="#c090d8"/>
+  <circle cx="37" cy="60" r="12" fill="white"/>
+  <circle cx="63" cy="60" r="12" fill="white"/>
+  <circle cx="37" cy="60" r="7.5" fill="#1a0820"/>
+  <circle cx="63" cy="60" r="7.5" fill="#1a0820"/>
+  <circle cx="40" cy="57" r="3" fill="white"/>
+  <circle cx="66" cy="57" r="3" fill="white"/>
+  <path d="M34 78 Q50 93 66 78" fill="#f070a0" stroke="#1a0820" stroke-width="2"/>
+  <rect x="42" y="77" width="6" height="8" rx="1.5" fill="white"/>
+  <rect x="52" y="77" width="6" height="8" rx="1.5" fill="white"/>
+  <circle cx="20" cy="72" r="9" fill="#f9a8d4" opacity="0.55"/>
+  <circle cx="80" cy="72" r="9" fill="#f9a8d4" opacity="0.55"/>
+</svg>`;
+
+// ── Question data ───────────────────────────────────────────────────────────
+const LEVELS = [
+  {
+    title:"Parts of a Whole", emoji:"🍕",
+    sub:"What do fractions mean?",
+    qs:[
+      {q:"A pizza has 8 slices. You eat 3. What fraction did you eat?",
+       a:["3/8","5/8","1/8","3/5"],c:0},
+      {q:"Which fraction means \"one half\"?",
+       a:["1/3","1/4","2/3","1/2"],c:3},
+      {q:"5 out of 10 students like soccer. What fraction is that?",
+       a:["1/5","5/1","1/2","2/5"],c:2},
+      {q:"You cut a ribbon into 4 equal pieces and keep 1 piece. What fraction do you have?",
+       a:["3/4","1/3","1/4","4/1"],c:2},
+      {q:"Which fraction is equivalent to 2/4?",
+       a:["2/3","1/2","3/4","1/3"],c:1}
+    ]
+  },
+  {
+    title:"Fractions → Decimals", emoji:"🔢",
+    sub:"Convert fractions to decimals!",
+    qs:[
+      {q:"What decimal equals 1/2?",
+       a:["0.25","0.75","0.5","0.2"],c:2},
+      {q:"What decimal equals 1/4?",
+       a:["0.5","0.25","0.4","0.1"],c:1},
+      {q:"What decimal equals 3/4?",
+       a:["0.5","0.34","0.25","0.75"],c:3},
+      {q:"What decimal equals 1/5?",
+       a:["0.5","0.2","0.15","0.25"],c:1},
+      {q:"What decimal equals 2/5?",
+       a:["0.25","0.45","0.4","0.2"],c:2}
+    ]
+  },
+  {
+    title:"Comparing Fractions", emoji:"⚖️",
+    sub:"Which one is bigger or smaller?",
+    qs:[
+      {q:"Which is LARGER: 1/3 or 1/4?",
+       a:["1/4","They're equal","1/3","Can't compare"],c:2},
+      {q:"Which is SMALLER: 3/8 or 1/2?",
+       a:["1/2","3/8","They're equal","Can't compare"],c:1},
+      {q:"Which decimal is the LARGEST?",
+       a:["0.3","0.4","0.25","0.35"],c:1},
+      {q:"Put in order SMALLEST → LARGEST: 1/2, 1/4, 1/3",
+       a:["1/4, 1/3, 1/2","1/2, 1/3, 1/4","1/3, 1/4, 1/2","1/4, 1/2, 1/3"],c:0},
+      {q:"Is 2/3 closer to 0 or closer to 1?",
+       a:["Exactly half","Closer to 0","Can't tell","Closer to 1"],c:3}
+    ]
+  },
+  {
+    title:"Adding Fractions", emoji:"➕",
+    sub:"Add fractions together!",
+    qs:[
+      {q:"1/4 + 2/4 = ?",
+       a:["3/8","2/8","1/2","3/4"],c:3},
+      {q:"2/6 + 1/6 = ?",
+       a:["3/12","2/3","3/6","1/3"],c:2},
+      {q:"1/3 + 1/3 = ?",
+       a:["2/6","1/6","2/3","1/9"],c:2},
+      {q:"3/8 + 2/8 = ?",
+       a:["6/8","5/16","1/2","5/8"],c:3},
+      {q:"0.3 + 1/2 = ?  (Hint: 1/2 = 0.5)",
+       a:["0.6","1.3","0.7","0.8"],c:3}
+    ]
+  },
+  {
+    title:"Real-World Problems", emoji:"🌍",
+    sub:"Fractions & decimals in real life!",
+    qs:[
+      {q:"A recipe needs 1 and 1/2 cups of flour. As a decimal, that's...",
+       a:["1.25","0.5","1.2","1.5"],c:3},
+      {q:"2 and 3/4 written as a decimal is...",
+       a:["2.7","2.34","2.75","2.25"],c:2},
+      {q:"Convert the improper fraction 7/4 to a mixed number:",
+       a:["2 and 1/4","1 and 1/2","1 and 1/4","1 and 3/4"],c:3},
+      {q:"Sam ran 0.6 miles. Jake ran 3/5 miles. Who ran farther?",
+       a:["Sam ran farther","Jake ran farther","Same distance!","Can't compare"],c:2},
+      {q:"A shirt costs $20 and is 1/4 off. How much do you SAVE?",
+       a:["$8","$4","$10","$5"],c:3}
+    ]
+  }
+];
+
+// ── State ────────────────────────────────────────────────────────────────────
+const G = {
+  best: [0,0,0,0,0],   // best score (# correct) per level
+  unlocked: [true,false,false,false,false],
+  lvl: 0, qIdx: 0, correct: 0, busy: false
+};
+
+const total = () => G.best.reduce((s,v)=>s+v,0);
+
+// ── Screen helper ─────────────────────────────────────────────────────────────
+function showS(name) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s-'+name).classList.add('active');
+  if (name==='level-select') renderLvlSelect();
+  if (name==='victory') renderVictory();
+}
+
+// ── Level Select ──────────────────────────────────────────────────────────────
+function renderLvlSelect() {
+  document.getElementById('total-disp').textContent = total();
+  const grid = document.getElementById('lvl-grid');
+  grid.innerHTML = '';
+  LEVELS.forEach((lv,i)=>{
+    const sc = G.best[i];
+    const locked = !G.unlocked[i];
+    const stars = sc===5?'⭐⭐⭐':sc>=4?'⭐⭐':sc>=3?'⭐':locked?'🔒':'—';
+    const d = document.createElement('div');
+    d.className = 'lvl-card'+(locked?' locked':'');
+    d.innerHTML = `<div class="big">${lv.emoji}</div>
+      <div style="font-weight:700;font-size:.95rem;margin-top:2px;">Level ${i+1}</div>
+      <div class="lname">${lv.title}</div>
+      <div class="stars">${stars}</div>`;
+    if (!locked) d.onclick = ()=>startLevel(i);
+    grid.appendChild(d);
+  });
+}
+
+// ── Start Level ───────────────────────────────────────────────────────────────
+function startLevel(idx) {
+  G.lvl=idx; G.qIdx=0; G.correct=0; G.busy=false;
+  document.getElementById('g-lvl-label').textContent =
+    `Level ${idx+1}: ${LEVELS[idx].title}`;
+  document.getElementById('snum').textContent = total();
+  document.getElementById('score-icon').innerHTML = LB;
+
+  // build Labubu slots
+  const row = document.getElementById('lb-row');
+  row.innerHTML='';
+  for(let i=0;i<5;i++){
+    const d=document.createElement('div');
+    d.className='lb-slot'; d.id='lb-'+i; d.innerHTML=LB;
+    row.appendChild(d);
+  }
+  showS('game');
+  showQ();
+}
+
+// ── Show Question ─────────────────────────────────────────────────────────────
+function showQ() {
+  const lv = LEVELS[G.lvl];
+  const q  = lv.qs[G.qIdx];
+  G.busy = false;
+  document.getElementById('q-num').textContent  = `Question ${G.qIdx+1} of ${lv.qs.length}`;
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('feedback').textContent='';
+  document.getElementById('feedback').className='feedback';
+  document.getElementById('prog-bar').style.width = (G.qIdx/lv.qs.length*100)+'%';
+
+  const grid = document.getElementById('choices');
+  grid.innerHTML='';
+  q.a.forEach((txt,i)=>{
+    const b=document.createElement('button');
+    b.className='cbtn'; b.textContent=txt;
+    b.onclick=()=>pick(i);
+    grid.appendChild(b);
+  });
+}
+
+// ── Pick Answer ───────────────────────────────────────────────────────────────
+const praise = ['Amazing! 🎉','Correct! ⭐','You got it! 🌟','Brilliant! ✨','Perfect! 🏆'];
+function pick(idx) {
+  if (G.busy) return;
+  G.busy=true;
+  const q = LEVELS[G.lvl].qs[G.qIdx];
+  const ok = idx===q.c;
+  const btns = document.querySelectorAll('.cbtn');
+  btns.forEach(b=>b.disabled=true);
+  btns[q.c].classList.add('correct');
+  const fb=document.getElementById('feedback');
+  if (ok) {
+    G.correct++;
+    const slot=document.getElementById('lb-'+G.qIdx);
+    if(slot) slot.classList.add('earned');
+    fb.textContent=praise[Math.floor(Math.random()*praise.length)];
+    fb.classList.add('ok');
+  } else {
+    btns[idx].classList.add('wrong');
+    fb.textContent=`Not quite! Answer: ${q.a[q.c]}`;
+    fb.classList.add('no');
+  }
+  setTimeout(()=>{
+    G.qIdx++;
+    G.qIdx < LEVELS[G.lvl].qs.length ? showQ() : finishLevel();
+  }, 1500);
+}
+
+// ── Level Finish ───────────────────────────────────────────────────────────────
+function finishLevel() {
+  const li=G.lvl, sc=G.correct;
+  if(sc>G.best[li]) G.best[li]=sc;
+  if(li+1<LEVELS.length) G.unlocked[li+1]=true;
+
+  document.getElementById('cpl-stars').textContent =
+    sc===5?'⭐⭐⭐':sc>=4?'⭐⭐':sc>=3?'⭐':'💫';
+  document.getElementById('cpl-title').textContent =
+    sc===5?'🎊 Perfect Score!':sc>=4?'🎉 Great Job!':sc>=3?'⭐ Level Complete!':'💪 Nice Try!';
+  document.getElementById('cpl-sub').textContent =
+    `You got ${sc}/5 correct and collected ${sc} Labubu!`;
+  document.getElementById('cpl-lb').innerHTML = LB;
+
+  // Labubu row in complete screen
+  const row=document.getElementById('lb-collected');
+  row.innerHTML='';
+  for(let i=0;i<5;i++){
+    const d=document.createElement('div');
+    d.style.cssText=`width:40px;height:40px;${i<sc?'filter:drop-shadow(0 2px 6px rgba(255,110,180,.6));':'filter:grayscale(.9) opacity(.22);'}`;
+    d.innerHTML=LB; row.appendChild(d);
+  }
+
+  const nb=document.getElementById('next-btn');
+  if(li+1>=LEVELS.length){
+    nb.textContent='🏆 See Results!';
+    nb.onclick=()=>showS('victory');
+  } else {
+    nb.textContent='Next Level →';
+    nb.onclick=()=>startLevel(li+1);
+  }
+  showS('complete');
+}
+
+function replayLvl(){startLevel(G.lvl);}
+
+// ── Victory ────────────────────────────────────────────────────────────────────
+function renderVictory(){
+  const t=total();
+  document.getElementById('vic-score').textContent=`${t} / 25`;
+  const row=document.getElementById('vic-lb-row');
+  row.innerHTML='';
+  const show=Math.min(t,10);
+  for(let i=0;i<show;i++){
+    const d=document.createElement('div');
+    d.style.cssText=`width:36px;height:36px;animation:lbPop .5s ease ${i*.08}s both;`;
+    d.innerHTML=LB; row.appendChild(d);
+  }
+}
+
+// ── Floating stars bg ─────────────────────────────────────────────────────────
+(function(){
+  const chars=['✦','✧','·','⋆','✺','★'];
+  for(let i=0;i<18;i++){
+    const el=document.createElement('div');
+    el.className='star';
+    el.textContent=chars[Math.floor(Math.random()*chars.length)];
+    el.style.cssText=`left:${Math.random()*100}vw;font-size:${12+Math.random()*16}px;
+      animation-duration:${9+Math.random()*13}s;animation-delay:${Math.random()*18}s;`;
+    document.body.appendChild(el);
+  }
+})();
+
+// ── Init title screen ─────────────────────────────────────────────────────────
+document.getElementById('title-lb').innerHTML = LB;
+</script>
+</body>
+</html>
