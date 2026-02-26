@@ -71,8 +71,11 @@ h1{font-size:2.2rem;background:linear-gradient(135deg,#ff6eb4,#a855f7,#ffd700);-
 @keyframes cPop{0%{transform:scale(1);}50%{transform:scale(1.06);}100%{transform:scale(1);}}
 @keyframes wShake{0%,100%{transform:translateX(0);}25%{transform:translateX(-7px);}75%{transform:translateX(7px);}}
 
-.feedback{text-align:center;font-size:1rem;font-weight:700;height:34px;display:flex;align-items:center;justify-content:center;margin-top:12px;border-radius:10px;}
+.feedback{text-align:center;font-size:1rem;font-weight:700;min-height:34px;display:flex;align-items:center;justify-content:center;margin-top:12px;border-radius:10px;}
 .feedback.ok{color:#4ade80;} .feedback.no{color:#f87171;}
+#explain{display:none;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);border-radius:12px;padding:11px 15px;margin-top:9px;color:#fca5a5;font-size:.88rem;line-height:1.55;text-align:left;}
+#explain.show{display:block;}
+#explain strong{color:#f87171;}
 
 /* Complete & Victory */
 .cpl-card{background:rgba(45,27,78,.95);border:2px solid #ffd700;border-radius:24px;padding:36px 26px;text-align:center;box-shadow:0 0 40px rgba(255,215,0,.22);}
@@ -143,6 +146,7 @@ h1{font-size:2.2rem;background:linear-gradient(135deg,#ff6eb4,#a855f7,#ffd700);-
       </div>
       <div class="choices" id="choices"></div>
       <div class="feedback" id="feedback"></div>
+      <div id="explain"></div>
     </div>
   </div>
 
@@ -225,15 +229,20 @@ const LEVELS = [
     sub:"What do fractions mean?",
     qs:[
       {q:"A pizza has 8 slices. You eat 3. What fraction did you eat?",
-       a:["3/8","5/8","1/8","3/5"],c:0},
+       a:["3/8","5/8","1/8","3/5"],c:0,
+       e:"A fraction is part ÷ whole. You ate 3 slices out of 8 total, so the answer is 3/8."},
       {q:"Which fraction means \"one half\"?",
-       a:["1/3","1/4","2/3","1/2"],c:3},
+       a:["1/3","1/4","2/3","1/2"],c:3,
+       e:"\"One half\" means 1 part out of 2 equal parts. That's written as 1/2."},
       {q:"5 out of 10 students like soccer. What fraction is that?",
-       a:["1/5","5/1","1/2","2/5"],c:2},
+       a:["1/5","5/1","1/2","2/5"],c:2,
+       e:"5 out of 10 = 5/10. Divide both by 5: 5÷5 / 10÷5 = 1/2. So 5/10 simplifies to 1/2."},
       {q:"You cut a ribbon into 4 equal pieces and keep 1 piece. What fraction do you have?",
-       a:["3/4","1/3","1/4","4/1"],c:2},
+       a:["3/4","1/3","1/4","4/1"],c:2,
+       e:"You have 1 piece out of 4 equal pieces. Part/Whole = 1/4."},
       {q:"Which fraction is equivalent to 2/4?",
-       a:["2/3","1/2","3/4","1/3"],c:1}
+       a:["2/3","1/2","3/4","1/3"],c:1,
+       e:"Divide both the numerator and denominator by 2: 2÷2 = 1, 4÷2 = 2. So 2/4 = 1/2."}
     ]
   },
   {
@@ -241,15 +250,20 @@ const LEVELS = [
     sub:"Convert fractions to decimals!",
     qs:[
       {q:"What decimal equals 1/2?",
-       a:["0.25","0.75","0.5","0.2"],c:2},
+       a:["0.25","0.75","0.5","0.2"],c:2,
+       e:"Divide the top by the bottom: 1 ÷ 2 = 0.5. Or think: 1/2 = 5/10 = 0.5."},
       {q:"What decimal equals 1/4?",
-       a:["0.5","0.25","0.4","0.1"],c:1},
+       a:["0.5","0.25","0.4","0.1"],c:1,
+       e:"1 ÷ 4 = 0.25. Or: 1/4 = 25/100 = 0.25. (Half of a half is a quarter.)"},
       {q:"What decimal equals 3/4?",
-       a:["0.5","0.34","0.25","0.75"],c:3},
+       a:["0.5","0.34","0.25","0.75"],c:3,
+       e:"3 ÷ 4 = 0.75. Or: 3/4 = 75/100 = 0.75. (Three quarters of a dollar = 75 cents!)"},
       {q:"What decimal equals 1/5?",
-       a:["0.5","0.2","0.15","0.25"],c:1},
+       a:["0.5","0.2","0.15","0.25"],c:1,
+       e:"1 ÷ 5 = 0.2. Or: multiply top and bottom by 2 → 2/10 = 0.2."},
       {q:"What decimal equals 2/5?",
-       a:["0.25","0.45","0.4","0.2"],c:2}
+       a:["0.25","0.45","0.4","0.2"],c:2,
+       e:"2 ÷ 5 = 0.4. Or: multiply top and bottom by 2 → 4/10 = 0.4."}
     ]
   },
   {
@@ -257,15 +271,20 @@ const LEVELS = [
     sub:"Which one is bigger or smaller?",
     qs:[
       {q:"Which is LARGER: 1/3 or 1/4?",
-       a:["1/4","They're equal","1/3","Can't compare"],c:2},
+       a:["1/4","They're equal","1/3","Can't compare"],c:2,
+       e:"Same numerator (1): a bigger denominator means smaller pieces. Thirds are bigger than fourths, so 1/3 > 1/4."},
       {q:"Which is SMALLER: 3/8 or 1/2?",
-       a:["1/2","3/8","They're equal","Can't compare"],c:1},
+       a:["1/2","3/8","They're equal","Can't compare"],c:1,
+       e:"Convert 1/2 to eighths: 1/2 = 4/8. Now compare 3/8 vs 4/8 — so 3/8 is smaller."},
       {q:"Which decimal is the LARGEST?",
-       a:["0.3","0.4","0.25","0.35"],c:1},
+       a:["0.3","0.4","0.25","0.35"],c:1,
+       e:"Line up the tenths digit: 0.4 has 4 tenths, which is more than 3, 2, or 3. So 0.4 is largest."},
       {q:"Put in order SMALLEST → LARGEST: 1/2, 1/4, 1/3",
-       a:["1/4, 1/3, 1/2","1/2, 1/3, 1/4","1/3, 1/4, 1/2","1/4, 1/2, 1/3"],c:0},
+       a:["1/4, 1/3, 1/2","1/2, 1/3, 1/4","1/3, 1/4, 1/2","1/4, 1/2, 1/3"],c:0,
+       e:"Use a common denominator of 12: 1/4=3/12, 1/3=4/12, 1/2=6/12. Order: 3<4<6, so 1/4 < 1/3 < 1/2."},
       {q:"Is 2/3 closer to 0 or closer to 1?",
-       a:["Exactly half","Closer to 0","Can't tell","Closer to 1"],c:3}
+       a:["Exactly half","Closer to 0","Can't tell","Closer to 1"],c:3,
+       e:"2/3 ≈ 0.667. Halfway would be 0.5. Since 0.667 > 0.5, it is closer to 1."}
     ]
   },
   {
@@ -273,15 +292,20 @@ const LEVELS = [
     sub:"Add fractions together!",
     qs:[
       {q:"1/4 + 2/4 = ?",
-       a:["3/8","2/8","1/2","3/4"],c:3},
+       a:["3/8","2/8","1/2","3/4"],c:3,
+       e:"Same denominator → just add the numerators: 1+2=3, keep the 4. Answer: 3/4."},
       {q:"2/6 + 1/6 = ?",
-       a:["3/12","2/3","3/6","1/3"],c:2},
+       a:["3/12","2/3","3/6","1/3"],c:2,
+       e:"Same denominator → add numerators: 2+1=3, keep the 6. Answer: 3/6 (which also equals 1/2)."},
       {q:"1/3 + 1/3 = ?",
-       a:["2/6","1/6","2/3","1/9"],c:2},
+       a:["2/6","1/6","2/3","1/9"],c:2,
+       e:"Same denominator → add numerators: 1+1=2, keep the 3. Answer: 2/3. (Don't add the denominators!)"},
       {q:"3/8 + 2/8 = ?",
-       a:["6/8","5/16","1/2","5/8"],c:3},
+       a:["6/8","5/16","1/2","5/8"],c:3,
+       e:"Same denominator → add numerators: 3+2=5, keep the 8. Answer: 5/8."},
       {q:"0.3 + 1/2 = ?  (Hint: 1/2 = 0.5)",
-       a:["0.6","1.3","0.7","0.8"],c:3}
+       a:["0.6","1.3","0.7","0.8"],c:3,
+       e:"Convert 1/2 to a decimal first: 1/2 = 0.5. Then add: 0.3 + 0.5 = 0.8."}
     ]
   },
   {
@@ -289,15 +313,20 @@ const LEVELS = [
     sub:"Fractions & decimals in real life!",
     qs:[
       {q:"A recipe needs 1 and 1/2 cups of flour. As a decimal, that's...",
-       a:["1.25","0.5","1.2","1.5"],c:3},
+       a:["1.25","0.5","1.2","1.5"],c:3,
+       e:"Split it up: 1 whole = 1.0, and 1/2 = 0.5. Add them: 1.0 + 0.5 = 1.5."},
       {q:"2 and 3/4 written as a decimal is...",
-       a:["2.7","2.34","2.75","2.25"],c:2},
+       a:["2.7","2.34","2.75","2.25"],c:2,
+       e:"Split it up: 2 whole = 2.0, and 3/4 = 0.75. Add them: 2.0 + 0.75 = 2.75."},
       {q:"Convert the improper fraction 7/4 to a mixed number:",
-       a:["2 and 1/4","1 and 1/2","1 and 1/4","1 and 3/4"],c:3},
+       a:["2 and 1/4","1 and 1/2","1 and 1/4","1 and 3/4"],c:3,
+       e:"Divide: 7 ÷ 4 = 1 remainder 3. So the whole number is 1, and the leftover is 3/4. Answer: 1 and 3/4."},
       {q:"Sam ran 0.6 miles. Jake ran 3/5 miles. Who ran farther?",
-       a:["Sam ran farther","Jake ran farther","Same distance!","Can't compare"],c:2},
+       a:["Sam ran farther","Jake ran farther","Same distance!","Can't compare"],c:2,
+       e:"Convert 3/5 to a decimal: 3 ÷ 5 = 0.6. Both ran exactly 0.6 miles — same distance!"},
       {q:"A shirt costs $20 and is 1/4 off. How much do you SAVE?",
-       a:["$8","$4","$10","$5"],c:3}
+       a:["$8","$4","$10","$5"],c:3,
+       e:"Find 1/4 of $20: $20 ÷ 4 = $5. You save $5 (and pay the remaining $15)."}
     ]
   }
 ];
@@ -368,6 +397,8 @@ function showQ() {
   document.getElementById('q-text').textContent = q.q;
   document.getElementById('feedback').textContent='';
   document.getElementById('feedback').className='feedback';
+  const ex=document.getElementById('explain');
+  ex.textContent=''; ex.className='';
   document.getElementById('prog-bar').style.width = (G.qIdx/lv.qs.length*100)+'%';
 
   const grid = document.getElementById('choices');
@@ -399,13 +430,16 @@ function pick(idx) {
     fb.classList.add('ok');
   } else {
     btns[idx].classList.add('wrong');
-    fb.textContent=`Not quite! Answer: ${q.a[q.c]}`;
+    fb.textContent=`Not quite! ✗`;
     fb.classList.add('no');
+    const ex=document.getElementById('explain');
+    ex.innerHTML=`<strong>How to get there:</strong> ${q.e}`;
+    ex.className='show';
   }
   setTimeout(()=>{
     G.qIdx++;
     G.qIdx < LEVELS[G.lvl].qs.length ? showQ() : finishLevel();
-  }, 1500);
+  }, ok ? 1500 : 3000);
 }
 
 // ── Level Finish ───────────────────────────────────────────────────────────────
