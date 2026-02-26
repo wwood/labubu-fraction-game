@@ -76,6 +76,9 @@ h1{font-size:2.2rem;background:linear-gradient(135deg,#ff6eb4,#a855f7,#ffd700);-
 #explain{display:none;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);border-radius:12px;padding:11px 15px;margin-top:9px;color:#fca5a5;font-size:.88rem;line-height:1.55;text-align:left;}
 #explain.show{display:block;}
 #explain strong{color:#f87171;}
+#cont-btn{display:none;background:rgba(168,85,247,.18);border:1px solid rgba(168,85,247,.45);color:#c4b5e8;font-size:.85rem;padding:9px 22px;border-radius:20px;cursor:pointer;margin-top:10px;width:100%;transition:all .2s;letter-spacing:.3px;}
+#cont-btn:hover{background:rgba(168,85,247,.35);color:#fff;}
+#cont-btn.show{display:block;}
 
 /* Complete & Victory */
 .cpl-card{background:rgba(45,27,78,.95);border:2px solid #ffd700;border-radius:24px;padding:36px 26px;text-align:center;box-shadow:0 0 40px rgba(255,215,0,.22);}
@@ -147,6 +150,7 @@ h1{font-size:2.2rem;background:linear-gradient(135deg,#ff6eb4,#a855f7,#ffd700);-
       <div class="choices" id="choices"></div>
       <div class="feedback" id="feedback"></div>
       <div id="explain"></div>
+      <button id="cont-btn" onclick="advanceQ()">Continue → &nbsp;<span style="opacity:.6;font-size:.8em;">Enter</span></button>
     </div>
   </div>
 
@@ -399,6 +403,8 @@ function showQ() {
   document.getElementById('feedback').className='feedback';
   const ex=document.getElementById('explain');
   ex.textContent=''; ex.className='';
+  document.getElementById('cont-btn').className='';
+  document.removeEventListener('keydown', onEnterAdvance);
   document.getElementById('prog-bar').style.width = (G.qIdx/lv.qs.length*100)+'%';
 
   const grid = document.getElementById('choices');
@@ -435,11 +441,21 @@ function pick(idx) {
     const ex=document.getElementById('explain');
     ex.innerHTML=`<strong>How to get there:</strong> ${q.e}`;
     ex.className='show';
+    document.getElementById('cont-btn').className='show';
+    document.addEventListener('keydown', onEnterAdvance);
   }
-  setTimeout(()=>{
-    G.qIdx++;
-    G.qIdx < LEVELS[G.lvl].qs.length ? showQ() : finishLevel();
-  }, ok ? 1500 : 3000);
+  if (ok) setTimeout(advanceQ, 1500);
+}
+
+function onEnterAdvance(e) {
+  if (e.key==='Enter') advanceQ();
+}
+
+function advanceQ() {
+  document.getElementById('cont-btn').className='';
+  document.removeEventListener('keydown', onEnterAdvance);
+  G.qIdx++;
+  G.qIdx < LEVELS[G.lvl].qs.length ? showQ() : finishLevel();
 }
 
 // ── Level Finish ───────────────────────────────────────────────────────────────
