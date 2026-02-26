@@ -252,7 +252,22 @@ const LEVELS = [
        e:"You have 1 piece out of 4 equal pieces. Part/Whole = 1/4."},
       {q:"Which fraction is equivalent to 2/4?",
        a:["2/3","1/2","3/4","1/3"],c:1,
-       e:"Divide both the numerator and denominator by 2: 2÷2 = 1, 4÷2 = 2. So 2/4 = 1/2."}
+       e:"Divide both the numerator and denominator by 2: 2÷2 = 1, 4÷2 = 2. So 2/4 = 1/2."},
+      {q:"A chocolate bar has 6 equal pieces. You eat 2. What fraction is left?",
+       a:["1/6","2/6","1/3","4/6"],c:3,
+       e:"You ate 2 pieces, so 6−2=4 remain. 4 out of 6 = 4/6."},
+      {q:"Which fraction means \"three quarters\"?",
+       a:["1/4","2/4","4/3","3/4"],c:3,
+       e:"\"Three quarters\" means 3 parts out of 4 equal parts, written as 3/4."},
+      {q:"A pie is cut into 6 slices. You eat 1. What fraction is left?",
+       a:["1/6","1/5","5/6","4/6"],c:2,
+       e:"1 slice eaten, so 6−1=5 remain out of 6. That's 5/6."},
+      {q:"Which of these is an improper fraction (numerator ≥ denominator)?",
+       a:["1/2","3/4","5/3","2/9"],c:2,
+       e:"In a proper fraction the top is less than the bottom. 5/3 has 5 > 3, so it is improper."},
+      {q:"3 out of 4 students pass a test. What fraction passed?",
+       a:["1/4","4/3","1/3","3/4"],c:3,
+       e:"3 students passed out of 4 total. Part/Whole = 3/4."}
     ]
   },
   {
@@ -273,7 +288,22 @@ const LEVELS = [
        e:"1 ÷ 5 = 0.2. Or: multiply top and bottom by 2 → 2/10 = 0.2."},
       {q:"What decimal equals 2/5?",
        a:["0.25","0.45","0.4","0.2"],c:2,
-       e:"2 ÷ 5 = 0.4. Or: multiply top and bottom by 2 → 4/10 = 0.4."}
+       e:"2 ÷ 5 = 0.4. Or: multiply top and bottom by 2 → 4/10 = 0.4."},
+      {q:"What decimal equals 3/5?",
+       a:["0.3","0.35","0.53","0.6"],c:3,
+       e:"3 ÷ 5 = 0.6. Or: multiply top and bottom by 2 → 6/10 = 0.6."},
+      {q:"What decimal equals 4/5?",
+       a:["0.45","0.8","0.4","0.54"],c:1,
+       e:"4 ÷ 5 = 0.8. Or: 4/5 = 8/10 = 0.8."},
+      {q:"What decimal equals 1/10?",
+       a:["0.01","1.0","10.0","0.1"],c:3,
+       e:"1/10 means 1 out of 10 equal parts — that's 1 tenth, written as 0.1."},
+      {q:"What decimal equals 7/10?",
+       a:["0.07","7.0","0.7","0.17"],c:2,
+       e:"7/10 means 7 tenths. Write it as 0.7."},
+      {q:"Which fraction equals 0.25?",
+       a:["1/2","2/5","1/25","1/4"],c:3,
+       e:"0.25 = 25 hundredths = 25/100. Simplify by dividing both by 25: 1/4."}
     ]
   },
   {
@@ -294,7 +324,22 @@ const LEVELS = [
        e:"Use a common denominator of 12: 1/4=3/12, 1/3=4/12, 1/2=6/12. Order: 3<4<6, so 1/4 < 1/3 < 1/2."},
       {q:"Is 2/3 closer to 0 or closer to 1?",
        a:["Exactly half","Closer to 0","Can't tell","Closer to 1"],c:3,
-       e:"2/3 ≈ 0.667. Halfway would be 0.5. Since 0.667 > 0.5, it is closer to 1."}
+       e:"2/3 ≈ 0.667. Halfway would be 0.5. Since 0.667 > 0.5, it is closer to 1."},
+      {q:"Which is LARGER: 2/3 or 3/4?",
+       a:["2/3","They're equal","3/4","Can't compare"],c:2,
+       e:"Use a common denominator of 12: 2/3=8/12, 3/4=9/12. Since 9 > 8, 3/4 is larger."},
+      {q:"Which decimal is SMALLEST?",
+       a:["0.6","0.55","0.605","0.5"],c:3,
+       e:"0.5 = 50 hundredths. The others are 55, 60, and 60.5 hundredths. So 0.5 is smallest."},
+      {q:"Which is LARGER: 5/8 or 1/2?",
+       a:["1/2","They're equal","Can't compare","5/8"],c:3,
+       e:"Convert 1/2 to eighths: 1/2 = 4/8. Since 5/8 > 4/8, the answer is 5/8."},
+      {q:"Is 1/4 closer to 0 or closer to 1?",
+       a:["Closer to 1","Exactly half","Closer to 0","Can't tell"],c:2,
+       e:"1/4 = 0.25. Halfway would be 0.5. Since 0.25 < 0.5, it is closer to 0."},
+      {q:"Which fraction is closest to 1 whole?",
+       a:["1/2","3/5","2/3","7/8"],c:3,
+       e:"Convert to decimals: 1/2=0.5, 3/5=0.6, 2/3≈0.667, 7/8=0.875. The closest to 1 is 7/8."}
     ]
   },
   {
@@ -315,7 +360,22 @@ const LEVELS = [
        e:"Same denominator → add numerators: 3+2=5, keep the 8. Answer: 5/8."},
       {q:"0.3 + 1/2 = ?  (Hint: 1/2 = 0.5)",
        a:["0.6","1.3","0.7","0.8"],c:3,
-       e:"Convert 1/2 to a decimal first: 1/2 = 0.5. Then add: 0.3 + 0.5 = 0.8."}
+       e:"Convert 1/2 to a decimal first: 1/2 = 0.5. Then add: 0.3 + 0.5 = 0.8."},
+      {q:"4/10 + 3/10 = ?",
+       a:["7/20","1/10","43/10","7/10"],c:3,
+       e:"Same denominator → add numerators: 4+3=7, keep the 10. Answer: 7/10."},
+      {q:"1/6 + 2/6 = ?",
+       a:["3/12","3/36","1/2","3/6"],c:3,
+       e:"Same denominator → add numerators: 1+2=3, keep the 6. Answer: 3/6."},
+      {q:"0.4 + 0.4 = ?",
+       a:["0.8","0.44","4.4","0.08"],c:0,
+       e:"Add the tenths: 4+4=8 tenths = 0.8."},
+      {q:"2/5 + 2/5 = ?",
+       a:["4/25","4/10","4/5","2/5"],c:2,
+       e:"Same denominator → add numerators: 2+2=4, keep the 5. Answer: 4/5."},
+      {q:"1/4 + 1/4 + 1/4 = ?",
+       a:["3/12","1/4","1/3","3/4"],c:3,
+       e:"Add the numerators: 1+1+1=3, keep the denominator 4. Answer: 3/4."}
     ]
   },
   {
@@ -336,7 +396,22 @@ const LEVELS = [
        e:"Convert 3/5 to a decimal: 3 ÷ 5 = 0.6. Both ran exactly 0.6 miles — same distance!"},
       {q:"A shirt costs $20 and is 1/4 off. How much do you SAVE?",
        a:["$8","$4","$10","$5"],c:3,
-       e:"Find 1/4 of $20: $20 ÷ 4 = $5. You save $5 (and pay the remaining $15)."}
+       e:"Find 1/4 of $20: $20 ÷ 4 = $5. You save $5 (and pay the remaining $15)."},
+      {q:"A bottle holds 3/4 litre. You drink 1/4 litre. How much is left?",
+       a:["1/8","1/4","1/2","2/8"],c:2,
+       e:"Subtract: 3/4 − 1/4 = 2/4. Simplify by dividing by 2: 2/4 = 1/2."},
+      {q:"A book is 100 pages. You've read 0.75 of it. How many pages is that?",
+       a:["70","25","7.5","75"],c:3,
+       e:"0.75 means 75 out of 100. So 0.75 × 100 = 75 pages."},
+      {q:"You have $5.50. You spend 1/2 of it. How much is left?",
+       a:["$5.00","$2.75","$2.50","$1.25"],c:1,
+       e:"1/2 of $5.50 = $5.50 ÷ 2 = $2.75. You spend $2.75 and keep $2.75."},
+      {q:"Convert the mixed number 2 and 1/2 to an improper fraction:",
+       a:["3/2","5/4","5/2","4/2"],c:2,
+       e:"Multiply whole number by denominator, add numerator: 2×2+1=5. Keep denominator: 5/2."},
+      {q:"A store has 30 shirts. 2/3 are on sale. How many shirts are on sale?",
+       a:["15","10","25","20"],c:3,
+       e:"Find 1/3 of 30: 30 ÷ 3 = 10. Then multiply by 2: 10 × 2 = 20 shirts."}
     ]
   }
 ];
@@ -345,10 +420,20 @@ const LEVELS = [
 const G = {
   best: [0,0,0,0,0],   // best score (# correct) per level
   unlocked: [true,false,false,false,false],
-  lvl: 0, qIdx: 0, correct: 0, streak: 0, busy: false
+  lvl: 0, qIdx: 0, correct: 0, streak: 0, busy: false,
+  questions: []  // 5 randomly sampled questions for the current level
 };
 
 const total = () => G.best.reduce((s,v)=>s+v,0);
+
+function sample5(arr) {
+  const a = arr.slice();
+  for (let i = a.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a.slice(0,5);
+}
 
 // ── Screen helper ─────────────────────────────────────────────────────────────
 function showS(name) {
@@ -381,6 +466,7 @@ function renderLvlSelect() {
 // ── Start Level ───────────────────────────────────────────────────────────────
 function startLevel(idx) {
   G.lvl=idx; G.qIdx=0; G.correct=0; G.streak=0; G.busy=false;
+  G.questions = sample5(LEVELS[idx].qs);
   const sp=document.getElementById('streak-pill');
   sp.className=''; sp.classList.remove('show');
   document.getElementById('g-lvl-label').textContent =
@@ -402,10 +488,9 @@ function startLevel(idx) {
 
 // ── Show Question ─────────────────────────────────────────────────────────────
 function showQ() {
-  const lv = LEVELS[G.lvl];
-  const q  = lv.qs[G.qIdx];
+  const q = G.questions[G.qIdx];
   G.busy = false;
-  document.getElementById('q-num').textContent  = `Question ${G.qIdx+1} of ${lv.qs.length}`;
+  document.getElementById('q-num').textContent  = `Question ${G.qIdx+1} of ${G.questions.length}`;
   document.getElementById('q-text').textContent = q.q;
   document.getElementById('feedback').textContent='';
   document.getElementById('feedback').className='feedback';
@@ -413,7 +498,7 @@ function showQ() {
   ex.textContent=''; ex.className='';
   document.getElementById('cont-btn').className='';
   document.removeEventListener('keydown', onEnterAdvance);
-  document.getElementById('prog-bar').style.width = (G.qIdx/lv.qs.length*100)+'%';
+  document.getElementById('prog-bar').style.width = (G.qIdx/G.questions.length*100)+'%';
 
   const grid = document.getElementById('choices');
   grid.innerHTML='';
@@ -430,7 +515,7 @@ const praise = ['Amazing! 🎉','Correct! ⭐','You got it! 🌟','Brilliant! �
 function pick(idx) {
   if (G.busy) return;
   G.busy=true;
-  const q = LEVELS[G.lvl].qs[G.qIdx];
+  const q = G.questions[G.qIdx];
   const ok = idx===q.c;
   const btns = document.querySelectorAll('.cbtn');
   btns.forEach(b=>b.disabled=true);
@@ -479,7 +564,7 @@ function advanceQ() {
   document.getElementById('cont-btn').className='';
   document.removeEventListener('keydown', onEnterAdvance);
   G.qIdx++;
-  G.qIdx < LEVELS[G.lvl].qs.length ? showQ() : finishLevel();
+  G.qIdx < G.questions.length ? showQ() : finishLevel();
 }
 
 // ── Level Finish ───────────────────────────────────────────────────────────────
