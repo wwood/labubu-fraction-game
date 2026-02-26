@@ -116,7 +116,7 @@ h1{font-size:2.2rem;background:linear-gradient(135deg,#ff6eb4,#a855f7,#ffd700);-
       <p class="sub">Learn Fractions &amp; Decimals<br>and collect Labubu friends! ✨</p>
       <p style="color:#c4b5e8;font-size:.88rem;margin-bottom:22px;line-height:1.6;">
         Answer math questions correctly to earn Labubu.<br>
-        5 levels · 5 questions each · Up to 3 ⭐ per level!
+        10 levels · 5 questions each · Up to 3 ⭐ per level!
       </p>
       <button class="btn" onclick="showS('level-select')">Start Adventure!</button>
     </div>
@@ -130,7 +130,7 @@ h1{font-size:2.2rem;background:linear-gradient(135deg,#ff6eb4,#a855f7,#ffd700);-
       <p class="sub">Collect Labubu by answering correctly!</p>
       <div class="lvl-grid" id="lvl-grid"></div>
       <p style="color:#c4b5e8;font-size:.85rem;">
-        Total Labubu: <span id="total-disp" style="color:#ffd700;font-weight:700;">0</span> / 25
+        Total Labubu: <span id="total-disp" style="color:#ffd700;font-weight:700;">0</span> / 50
       </p>
     </div>
   </div>
@@ -184,7 +184,7 @@ h1{font-size:2.2rem;background:linear-gradient(135deg,#ff6eb4,#a855f7,#ffd700);-
       <p class="sub">You've mastered fractions &amp; decimals!</p>
       <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:18px 0;" id="vic-lb-row"></div>
       <p style="color:#c4b5e8;font-size:.9rem;margin-bottom:6px;">Labubu Collected</p>
-      <div class="vic-total" id="vic-score">0 / 25</div>
+      <div class="vic-total" id="vic-score">0 / 50</div>
       <p style="color:#c4b5e8;font-size:.88rem;margin:14px 0 18px;">Fraction superstar! Keep learning! ⭐</p>
       <button class="btn" onclick="showS('level-select')">Play Again</button>
     </div>
@@ -413,13 +413,193 @@ const LEVELS = [
        a:["15","10","25","20"],c:3,
        e:"Find 1/3 of 30: 30 ÷ 3 = 10. Then multiply by 2: 10 × 2 = 20 shirts."}
     ]
+  },
+  {
+    title:"Subtracting Fractions", emoji:"➖",
+    sub:"Take fractions away!",
+    qs:[
+      {q:"3/4 − 1/4 = ?",
+       a:["1/0","1/4","1/2","2/8"],c:2,
+       e:"Same denominator → subtract numerators: 3−1=2, keep 4. That gives 2/4, which simplifies to 1/2."},
+      {q:"5/8 − 2/8 = ?",
+       a:["3/16","7/8","3/0","3/8"],c:3,
+       e:"Same denominator → subtract numerators: 5−2=3, keep 8. Answer: 3/8."},
+      {q:"7/10 − 3/10 = ?",
+       a:["4/20","1/2","4/0","4/10"],c:3,
+       e:"Same denominator → subtract numerators: 7−3=4, keep 10. Answer: 4/10."},
+      {q:"1 whole − 1/4 = ?",
+       a:["1/4","2/4","3/4","4/4"],c:2,
+       e:"Write 1 as 4/4. Then 4/4 − 1/4 = 3/4."},
+      {q:"3/5 − 1/5 = ?",
+       a:["1/5","3/10","2/0","2/5"],c:3,
+       e:"Same denominator → subtract numerators: 3−1=2, keep 5. Answer: 2/5."},
+      {q:"5/6 − 1/6 = ?",
+       a:["4/12","4/36","4/6","1/6"],c:2,
+       e:"Same denominator → subtract numerators: 5−1=4, keep 6. Answer: 4/6."},
+      {q:"1 whole − 3/8 = ?",
+       a:["3/8","5/16","1/8","5/8"],c:3,
+       e:"Write 1 as 8/8. Then 8/8 − 3/8 = 5/8."},
+      {q:"4/5 − 2/5 = ?",
+       a:["2/10","6/5","2/0","2/5"],c:3,
+       e:"Same denominator → subtract numerators: 4−2=2, keep 5. Answer: 2/5."},
+      {q:"9/10 − 4/10 = ?",
+       a:["5/20","1/2","13/10","5/10"],c:3,
+       e:"Same denominator → subtract numerators: 9−4=5, keep 10. Answer: 5/10 (same as 1/2)."},
+      {q:"2 and 3/4 − 1 and 1/4 = ?",
+       a:["1 and 1/4","3 and 1/2","1 and 2/8","1 and 1/2"],c:3,
+       e:"Subtract the whole numbers: 2−1=1. Subtract the fractions: 3/4−1/4=2/4=1/2. Answer: 1 and 1/2."}
+    ]
+  },
+  {
+    title:"Multiplying Fractions", emoji:"✖️",
+    sub:"Multiply top × top, bottom × bottom!",
+    qs:[
+      {q:"1/2 × 1/2 = ?",
+       a:["1/4","1/2","2/4","2/2"],c:0,
+       e:"Multiply numerators: 1×1=1. Multiply denominators: 2×2=4. Answer: 1/4."},
+      {q:"2/3 × 3/4 = ?",
+       a:["5/7","6/7","6/12","5/12"],c:2,
+       e:"Multiply numerators: 2×3=6. Multiply denominators: 3×4=12. Answer: 6/12 (= 1/2)."},
+      {q:"1/3 × 1/4 = ?",
+       a:["2/12","1/7","1/12","2/7"],c:2,
+       e:"Multiply numerators: 1×1=1. Multiply denominators: 3×4=12. Answer: 1/12."},
+      {q:"3 × 2/3 = ?",
+       a:["6/9","2/3","6/3","2"],c:3,
+       e:"3 × 2/3 = (3×2)/3 = 6/3 = 2. Multiply the whole number by the numerator, then divide by the denominator."},
+      {q:"1/2 × 3/4 = ?",
+       a:["4/6","4/8","3/8","3/6"],c:2,
+       e:"Multiply numerators: 1×3=3. Multiply denominators: 2×4=8. Answer: 3/8."},
+      {q:"2/5 × 1/2 = ?",
+       a:["3/7","1/10","1/5","3/10"],c:2,
+       e:"Multiply numerators: 2×1=2. Multiply denominators: 5×2=10. That's 2/10, which simplifies to 1/5."},
+      {q:"4 × 1/4 = ?",
+       a:["4/4","1/4","4/1","1"],c:3,
+       e:"4 × 1/4 = (4×1)/4 = 4/4 = 1. Multiplying by 1/4 is the same as dividing by 4."},
+      {q:"2/3 × 2/3 = ?",
+       a:["4/9","4/6","4/3","2/9"],c:0,
+       e:"Multiply numerators: 2×2=4. Multiply denominators: 3×3=9. Answer: 4/9."},
+      {q:"1/4 × 2/3 = ?",
+       a:["3/12","1/12","1/6","2/7"],c:2,
+       e:"Multiply numerators: 1×2=2. Multiply denominators: 4×3=12. That's 2/12, which simplifies to 1/6."},
+      {q:"3/4 × 2/3 = ?",
+       a:["6/7","5/12","6/12","5/7"],c:2,
+       e:"Multiply numerators: 3×2=6. Multiply denominators: 4×3=12. Answer: 6/12 (simplifies to 1/2)."}
+    ]
+  },
+  {
+    title:"Dividing Fractions", emoji:"➗",
+    sub:"Flip the second fraction and multiply!",
+    qs:[
+      {q:"1/2 ÷ 2 = ?",
+       a:["1","1/4","2/2","1/2"],c:1,
+       e:"Dividing by 2 means multiplying by 1/2. So 1/2 × 1/2 = 1/4."},
+      {q:"1/2 ÷ 1/4 = ?",
+       a:["1/8","2","4","1/2"],c:1,
+       e:"Flip 1/4 → 4/1. Then multiply: 1/2 × 4 = 4/2 = 2."},
+      {q:"3/4 ÷ 3 = ?",
+       a:["9/4","1/4","3/12","2/4"],c:1,
+       e:"Dividing by 3 means multiplying by 1/3. So 3/4 × 1/3 = 3/12 = 1/4."},
+      {q:"2/3 ÷ 1/3 = ?",
+       a:["2/9","1","2","3/2"],c:2,
+       e:"Flip 1/3 → 3/1. Multiply: 2/3 × 3 = 6/3 = 2."},
+      {q:"1/4 ÷ 1/2 = ?",
+       a:["1/8","2","1/2","1/4"],c:2,
+       e:"Flip 1/2 → 2/1. Multiply: 1/4 × 2 = 2/4 = 1/2."},
+      {q:"4 ÷ 1/2 = ?",
+       a:["2","8","4","1/8"],c:1,
+       e:"Dividing by 1/2 is the same as multiplying by 2. So 4 × 2 = 8."},
+      {q:"3/5 ÷ 3/5 = ?",
+       a:["9/25","0","3/5","1"],c:3,
+       e:"Any number divided by itself equals 1. Check: flip 3/5 → 5/3, then 3/5 × 5/3 = 15/15 = 1."},
+      {q:"1/3 ÷ 2 = ?",
+       a:["2/3","1/6","3/2","2/9"],c:1,
+       e:"Dividing by 2 means multiplying by 1/2. So 1/3 × 1/2 = 1/6."},
+      {q:"3/4 ÷ 1/2 = ?",
+       a:["3/8","3/2","4/3","1/2"],c:1,
+       e:"Flip 1/2 → 2/1. Multiply: 3/4 × 2 = 6/4 = 3/2 (or 1 and 1/2)."},
+      {q:"2/5 ÷ 4/5 = ?",
+       a:["8/25","2/4","5/2","1/2"],c:3,
+       e:"Flip 4/5 → 5/4. Multiply: 2/5 × 5/4 = 10/20 = 1/2."}
+    ]
+  },
+  {
+    title:"Unlike Denominators", emoji:"🔗",
+    sub:"Find a common denominator first!",
+    qs:[
+      {q:"1/2 + 1/4 = ?",
+       a:["2/6","3/4","2/8","1/3"],c:1,
+       e:"Convert 1/2 to fourths: 1/2 = 2/4. Then add: 2/4 + 1/4 = 3/4."},
+      {q:"1/3 + 1/6 = ?",
+       a:["2/9","2/18","1/2","1/9"],c:2,
+       e:"Convert 1/3 to sixths: 1/3 = 2/6. Then add: 2/6 + 1/6 = 3/6 = 1/2."},
+      {q:"3/4 − 1/2 = ?",
+       a:["2/2","1/4","2/8","1/2"],c:1,
+       e:"Convert 1/2 to fourths: 1/2 = 2/4. Then subtract: 3/4 − 2/4 = 1/4."},
+      {q:"1/2 + 1/3 = ?",
+       a:["2/5","5/6","2/6","1/6"],c:1,
+       e:"Common denominator is 6. Convert: 1/2=3/6 and 1/3=2/6. Add: 3/6+2/6=5/6."},
+      {q:"5/6 − 1/3 = ?",
+       a:["4/3","1/2","4/6","3/9"],c:1,
+       e:"Convert 1/3 to sixths: 1/3 = 2/6. Then subtract: 5/6 − 2/6 = 3/6 = 1/2."},
+      {q:"1/4 + 1/2 = ?",
+       a:["2/6","1/3","3/4","2/4"],c:2,
+       e:"Convert 1/2 to fourths: 1/2 = 2/4. Then add: 1/4 + 2/4 = 3/4."},
+      {q:"2/3 + 1/4 = ?",
+       a:["3/7","11/12","3/12","8/12"],c:1,
+       e:"Common denominator is 12. Convert: 2/3=8/12 and 1/4=3/12. Add: 8/12+3/12=11/12."},
+      {q:"3/4 − 1/3 = ?",
+       a:["2/1","5/12","7/12","2/7"],c:1,
+       e:"Common denominator is 12. Convert: 3/4=9/12 and 1/3=4/12. Subtract: 9/12−4/12=5/12."},
+      {q:"1/2 − 1/3 = ?",
+       a:["1/6","0","1/5","2/6"],c:0,
+       e:"Common denominator is 6. Convert: 1/2=3/6 and 1/3=2/6. Subtract: 3/6−2/6=1/6."},
+      {q:"5/8 + 1/4 = ?",
+       a:["6/12","7/8","6/8","3/4"],c:1,
+       e:"Convert 1/4 to eighths: 1/4 = 2/8. Then add: 5/8 + 2/8 = 7/8."}
+    ]
+  },
+  {
+    title:"Challenge Round", emoji:"🏆",
+    sub:"Mixed operations — can you handle it?",
+    qs:[
+      {q:"2/3 × 3/2 = ?",
+       a:["6/5","2/3","1","4/6"],c:2,
+       e:"Multiply: 2×3=6, 3×2=6. That's 6/6=1. A fraction times its reciprocal always equals 1!"},
+      {q:"Simplify 8/12 to its lowest terms:",
+       a:["4/8","2/4","2/3","4/6"],c:2,
+       e:"GCF of 8 and 12 is 4. Divide both: 8÷4=2, 12÷4=3. Answer: 2/3."},
+      {q:"1/2 + 1/4 + 1/8 = ?",
+       a:["3/14","7/8","3/24","6/8"],c:1,
+       e:"Convert to eighths: 1/2=4/8, 1/4=2/8. Add: 4/8+2/8+1/8=7/8."},
+      {q:"(1/2)²  means 1/2 × 1/2. What is it?",
+       a:["1/4","1","2/4","1/2"],c:0,
+       e:"1/2 × 1/2: multiply numerators 1×1=1, denominators 2×2=4. Answer: 1/4."},
+      {q:"A recipe uses 2/3 cup of sugar per batch. You make 3 batches. Total sugar?",
+       a:["2/9 cup","5/3 cups","2 cups","2/3 cup"],c:2,
+       e:"Multiply: 2/3 × 3 = 6/3 = 2. You need 2 whole cups."},
+      {q:"3/4 ÷ 3/8 = ?",
+       a:["9/32","2","1/2","9/8"],c:1,
+       e:"Flip 3/8 → 8/3. Multiply: 3/4 × 8/3 = 24/12 = 2."},
+      {q:"Which gives a LARGER result: 2/3 × 1/2 OR 2/3 ÷ 1/2?",
+       a:["2/3 × 1/2","They're equal","2/3 ÷ 1/2","Can't tell"],c:2,
+       e:"2/3 × 1/2 = 1/3 ≈ 0.33. But 2/3 ÷ 1/2 = 2/3 × 2 = 4/3 ≈ 1.33. Division gives the larger result."},
+      {q:"A tank is 3/4 full. You use 1/3 of what's in it. What fraction of the tank did you use?",
+       a:["2/7","1/4","1/2","1/12"],c:1,
+       e:"You use 1/3 of 3/4. Multiply: 1/3 × 3/4 = 3/12 = 1/4 of the tank."},
+      {q:"Solve: 1/2 + 3/4 − 1/4 = ?",
+       a:["3/10","1","1/2","3/4"],c:1,
+       e:"Convert 1/2 to fourths: 2/4. Then: 2/4+3/4=5/4, and 5/4−1/4=4/4=1."},
+      {q:"A jug holds 5/6 litre. Poured equally into 5 glasses. How much in each glass?",
+       a:["1/5 litre","1/6 litre","5/30 litre","5/6 litre"],c:1,
+       e:"Divide: 5/6 ÷ 5 = 5/6 × 1/5 = 5/30 = 1/6 litre per glass."}
+    ]
   }
 ];
 
 // ── State ────────────────────────────────────────────────────────────────────
 const G = {
-  best: [0,0,0,0,0],   // best score (# correct) per level
-  unlocked: [true,false,false,false,false],
+  best: [0,0,0,0,0,0,0,0,0,0],   // best score (# correct) per level
+  unlocked: [true,false,false,false,false,false,false,false,false,false],
   lvl: 0, qIdx: 0, correct: 0, streak: 0, busy: false,
   questions: []  // 5 randomly sampled questions for the current level
 };
@@ -639,7 +819,7 @@ function replayLvl(){startLevel(G.lvl);}
 // ── Victory ────────────────────────────────────────────────────────────────────
 function renderVictory(){
   const t=total();
-  document.getElementById('vic-score').textContent=`${t} / 25`;
+  document.getElementById('vic-score').textContent=`${t} / 50`;
   const row=document.getElementById('vic-lb-row');
   row.innerHTML='';
   const show=Math.min(t,10);
